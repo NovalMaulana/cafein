@@ -15,10 +15,9 @@ class _EditCafeDialogState extends State<EditCafeDialog> {
   final service = CafeService();
   late TextEditingController _nameController;
 
-  // Mengambil tema warna yang sama dengan MapPage
-  final Color _primaryColor = const Color(0xFF2C3E50); // Dark Slate
-  final Color _accentColor = const Color(0xFFD35400); // Burnt Orange
-  final Color _dangerColor = const Color(0xFFE74C3C); // Alizarin Red
+  final Color _primaryColor = const Color(0xFF2C3E50);
+  final Color _accentColor = const Color(0xFFD35400);
+  final Color _dangerColor = const Color(0xFFE74C3C);
 
   @override
   void initState() {
@@ -34,7 +33,6 @@ class _EditCafeDialogState extends State<EditCafeDialog> {
 
   @override
   Widget build(BuildContext context) {
-    // Kita gunakan Dialog custom, bukan AlertDialog standar agar lebih fleksibel styling-nya
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 0,
@@ -53,10 +51,9 @@ class _EditCafeDialogState extends State<EditCafeDialog> {
           ],
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min, // Agar dialog fit konten
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. HEADER
             Row(
               children: [
                 Container(
@@ -83,7 +80,6 @@ class _EditCafeDialogState extends State<EditCafeDialog> {
             ),
             const SizedBox(height: 24),
 
-            // 2. COORDINATES INFO (Visual Modern)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
@@ -111,7 +107,6 @@ class _EditCafeDialogState extends State<EditCafeDialog> {
             ),
             const SizedBox(height: 16),
 
-            // 3. INPUT FIELD
             TextField(
               controller: _nameController,
               autofocus: true,
@@ -140,14 +135,11 @@ class _EditCafeDialogState extends State<EditCafeDialog> {
             ),
             const SizedBox(height: 30),
 
-            // 4. ACTION BUTTONS
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Tombol Hapus (Icon Button dengan teks kecil agar tidak terpencet tidak sengaja)
                 TextButton.icon(
                   onPressed: () async {
-                    // Opsional: Tambahkan konfirmasi delete di sini jika mau
                     await service.deleteCafe(widget.cafe['id']);
                     widget.onSaved();
                     if (context.mounted) Navigator.pop(context);
@@ -169,7 +161,6 @@ class _EditCafeDialogState extends State<EditCafeDialog> {
                   ),
                 ),
 
-                // Tombol Update (Primary)
                 ElevatedButton(
                   onPressed: () async {
                     if (_nameController.text.isNotEmpty) {
