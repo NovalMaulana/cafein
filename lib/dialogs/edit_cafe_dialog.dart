@@ -15,9 +15,9 @@ class _EditCafeDialogState extends State<EditCafeDialog> {
   final service = CafeService();
   late TextEditingController _nameController;
 
-  final Color _primaryColor = const Color(0xFF2C3E50);
-  final Color _accentColor = const Color(0xFFD35400);
-  final Color _dangerColor = const Color(0xFFE74C3C);
+  final Color _primaryColor = const Color(0xFF2C3E50); // Dark Slate
+  final Color _accentColor = const Color(0xFFD35400); // Burnt Orange
+  final Color _dangerColor = const Color(0xFFE74C3C); // Alizarin Red
 
   @override
   void initState() {
@@ -136,7 +136,6 @@ class _EditCafeDialogState extends State<EditCafeDialog> {
             const SizedBox(height: 30),
 
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton.icon(
                   onPressed: () async {
@@ -152,7 +151,7 @@ class _EditCafeDialogState extends State<EditCafeDialog> {
                   label: Text("Hapus", style: TextStyle(color: _dangerColor)),
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
+                      horizontal: 12,
                       vertical: 12,
                     ),
                     shape: RoundedRectangleBorder(
@@ -160,33 +159,39 @@ class _EditCafeDialogState extends State<EditCafeDialog> {
                     ),
                   ),
                 ),
-
-                ElevatedButton(
-                  onPressed: () async {
-                    if (_nameController.text.isNotEmpty) {
-                      await service.updateCafe(
-                        widget.cafe['id'],
-                        _nameController.text,
-                      );
-                      widget.onSaved();
-                      if (context.mounted) Navigator.pop(context);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _primaryColor,
-                    foregroundColor: Colors.white,
-                    elevation: 2,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
+                const Spacer(),
+                Flexible(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (_nameController.text.isNotEmpty) {
+                        await service.updateCafe(
+                          widget.cafe['id'],
+                          _nameController.text,
+                        );
+                        widget.onSaved();
+                        if (context.mounted) Navigator.pop(context);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _primaryColor,
+                      foregroundColor: Colors.white,
+                      elevation: 2,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                    child: const Text(
+                      "Simpan Perubahan",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    "Simpan Perubahan",
-                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
