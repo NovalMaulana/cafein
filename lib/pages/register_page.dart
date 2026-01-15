@@ -1,6 +1,6 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import '../services/auth_service.dart'; // Sesuaikan path
+import '../services/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -21,9 +21,8 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
-  // Theme Colors - Konsisten dengan MapPage
-  final Color _primaryColor = const Color(0xFF2C3E50); // Dark Slate
-  final Color _accentColor = const Color(0xFFD35400); // Burnt Orange
+  final Color _primaryColor = const Color(0xFF2C3E50);
+  final Color _accentColor = const Color(0xFFD35400);
 
   @override
   void dispose() {
@@ -75,10 +74,8 @@ class _RegisterPageState extends State<RegisterPage> {
       backgroundColor: _primaryColor,
       body: Stack(
         children: [
-          // 1. Background Gradient & Deco
           _buildBackground(),
 
-          // 2. Main Content
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -113,7 +110,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         ),
-        // Lingkaran dekoratif samar
         Positioned(
           top: -50,
           right: -50,
