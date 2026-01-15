@@ -1,4 +1,4 @@
-import 'dart:ui' as ui; // Untuk ImageFilter (Glassmorphism)
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -20,9 +20,8 @@ class _MapPageState extends State<MapPage> {
   LatLng? tappedPoint;
   final MapController _mapController = MapController();
 
-  // Palet Warna Modern (Theme)
-  final Color _primaryColor = const Color(0xFF2C3E50); // Dark Slate
-  final Color _accentColor = const Color(0xFFD35400); // Burnt Orange
+  final Color _primaryColor = const Color(0xFF2C3E50);
+  final Color _accentColor = const Color(0xFFD35400);
 
   Future load() async {
     final result = await service.getCafes();
@@ -40,20 +39,18 @@ class _MapPageState extends State<MapPage> {
     setState(() {
       tappedPoint = point;
     });
-    // Optional: Animate map to center slightly above the point so the marker isn't hidden by FAB
-    // _mapController.move(point, _mapController.camera.zoom);
   }
 
   void _openAddDialog() {
     if (tappedPoint == null) return;
     showDialog(
       context: context,
-      barrierDismissible: false, // User harus save/cancel eksplisit
+      barrierDismissible: false,
       builder: (_) => BackdropFilter(
         filter: ui.ImageFilter.blur(
           sigmaX: 5,
           sigmaY: 5,
-        ), // Blur background dialog
+        ),
         child: AddCafeDialog(point: tappedPoint!, onSaved: load),
       ),
     );
@@ -96,7 +93,6 @@ class _MapPageState extends State<MapPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Header
                     Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -144,7 +140,6 @@ class _MapPageState extends State<MapPage> {
                         ],
                       ),
                     ),
-                    // List
                     Flexible(
                       child: cafes.isEmpty
                           ? Padding(
@@ -292,10 +287,9 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar:
-          true, // PENTING: Agar map full screen di belakang status bar
+          true,
       body: Stack(
         children: [
-          // 1. LAYER PETA
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
@@ -316,19 +310,17 @@ class _MapPageState extends State<MapPage> {
                 flags:
                     InteractiveFlag.all &
                     ~InteractiveFlag
-                        .rotate, // Disable rotasi agar label tetap lurus
+                        .rotate,
               ),
             ),
             children: [
               TileLayer(
-                // Menggunakan CartoDB Voyager untuk tampilan peta yang lebih bersih dan modern dibanding default OSM
                 urlTemplate:
                     "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
                 subdomains: const ['a', 'b', 'c', 'd'],
                 userAgentPackageName: 'com.example.app',
               ),
 
-              // Marker Layer untuk Lokasi yang Dipilih (Baru)
               if (tappedPoint != null)
                 MarkerLayer(
                   markers: [
@@ -342,7 +334,6 @@ class _MapPageState extends State<MapPage> {
                   ],
                 ),
 
-              // Marker Layer untuk Kafe yang Sudah Ada
               MarkerLayer(
                 markers: cafes.map((c) {
                   return Marker(
@@ -360,7 +351,6 @@ class _MapPageState extends State<MapPage> {
             ],
           ),
 
-          // 2. LAYER HEADER (Floating Glassmorphism)
           Positioned(
             top: 50,
             left: 20,
@@ -427,7 +417,6 @@ class _MapPageState extends State<MapPage> {
                         const SizedBox(width: 8),
                         GestureDetector(
                           onTap: () async {
-                            // Show confirmation dialog
                             final shouldLogout = await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -475,7 +464,6 @@ class _MapPageState extends State<MapPage> {
             ),
           ),
 
-          // 3. LAYER ACTION BUTTON (Bottom Center)
           Positioned(
             bottom: 40,
             left: 0,
@@ -509,7 +497,7 @@ class _MapPageState extends State<MapPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50),
                         ),
-                        elevation: 0, // Shadow ditangani oleh Container
+                        elevation: 0,
                       ),
                       icon: const Icon(Icons.add_location_alt_outlined),
                       label: const Text(
@@ -526,7 +514,6 @@ class _MapPageState extends State<MapPage> {
             ),
           ),
 
-          // Petunjuk jika belum tap apapun
           if (tappedPoint == null && cafes.isNotEmpty)
             Positioned(
               bottom: 50,
@@ -557,7 +544,6 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  // WIDGET HELPER: Marker Cafe (Existing)
   Widget _buildCafeMarker() {
     return Column(
       children: [
@@ -577,7 +563,6 @@ class _MapPageState extends State<MapPage> {
           ),
           child: Icon(Icons.local_cafe, size: 20, color: _accentColor),
         ),
-        // Segitiga kecil di bawah (Pointer)
         ClipPath(
           clipper: TriangleClipper(),
           child: Container(color: _primaryColor, height: 8, width: 10),
@@ -586,7 +571,6 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  // WIDGET HELPER: Marker Seleksi (New Location)
   Widget _buildAnimatedSelectionMarker() {
     return TweenAnimationBuilder(
       tween: Tween<double>(begin: 0, end: 1),
@@ -594,7 +578,7 @@ class _MapPageState extends State<MapPage> {
       curve: Curves.elasticOut,
       builder: (context, double val, child) {
         return Transform.translate(
-          offset: Offset(0, -10 * (1 - val)), // Animasi turun dari atas
+          offset: Offset(0, -10 * (1 - val)), 
           child: Transform.scale(
             scale: val,
             child: Column(
@@ -627,7 +611,6 @@ class _MapPageState extends State<MapPage> {
   }
 }
 
-// Clipper Sederhana untuk membuat ujung marker lancip
 class TriangleClipper extends CustomClipper<ui.Path> {
   @override
   ui.Path getClip(Size size) {
