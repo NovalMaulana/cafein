@@ -16,9 +16,8 @@ class _AddCafeDialogState extends State<AddCafeDialog> {
   final _nameController = TextEditingController();
   final _service = CafeService();
 
-  // Palet Warna (Konsisten dengan MapPage & EditPage)
-  final Color _primaryColor = const Color(0xFF2C3E50); // Dark Slate
-  final Color _accentColor = const Color(0xFFD35400); // Burnt Orange
+  final Color _primaryColor = const Color(0xFF2C3E50);
+  final Color _accentColor = const Color(0xFFD35400);
 
   @override
   void dispose() {
@@ -49,7 +48,6 @@ class _AddCafeDialogState extends State<AddCafeDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. HEADER
             Row(
               children: [
                 Container(
@@ -57,7 +55,7 @@ class _AddCafeDialogState extends State<AddCafeDialog> {
                   decoration: BoxDecoration(
                     color: _accentColor.withOpacity(
                       0.1,
-                    ), // Background oranye muda
+                    ),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -78,7 +76,6 @@ class _AddCafeDialogState extends State<AddCafeDialog> {
             ),
             const SizedBox(height: 24),
 
-            // 2. COORDINATES INFO BOX
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(12),
@@ -91,7 +88,7 @@ class _AddCafeDialogState extends State<AddCafeDialog> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "KOORDINAT TERPILIH",
+                    "Koordinat Terpilih",
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
@@ -105,7 +102,6 @@ class _AddCafeDialogState extends State<AddCafeDialog> {
                       Icon(Icons.my_location, size: 14, color: _primaryColor),
                       const SizedBox(width: 8),
                       Text(
-                        // Format angka agar tidak terlalu panjang (6 desimal)
                         "${widget.point.latitude.toStringAsFixed(6)}, ${widget.point.longitude.toStringAsFixed(6)}",
                         style: TextStyle(
                           fontFamily: 'monospace',
@@ -121,7 +117,6 @@ class _AddCafeDialogState extends State<AddCafeDialog> {
             ),
             const SizedBox(height: 20),
 
-            // 3. INPUT FIELD
             TextField(
               controller: _nameController,
               autofocus: true,
@@ -151,7 +146,6 @@ class _AddCafeDialogState extends State<AddCafeDialog> {
             ),
             const SizedBox(height: 30),
 
-            // 4. ACTION BUTTONS
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -170,8 +164,6 @@ class _AddCafeDialogState extends State<AddCafeDialog> {
                 ElevatedButton(
                   onPressed: () async {
                     if (_nameController.text.isNotEmpty) {
-                      // Tampilkan loading indicator kecil di tombol jika mau,
-                      // tapi untuk operasi cepat ini langsung saja
                       await _service.createCafe(
                         _nameController.text,
                         widget.point.latitude,
