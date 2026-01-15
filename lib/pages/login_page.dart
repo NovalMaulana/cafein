@@ -18,9 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   bool _obscurePassword = true;
 
-  // Palet Warna Modern (Sesuai dengan map_page.dart)
-  final Color _primaryColor = const Color(0xFF2C3E50); // Dark Slate
-  final Color _accentColor = const Color(0xFFD35400); // Burnt Orange
+  final Color _primaryColor = const Color(0xFF2C3E50);
+  final Color _accentColor = const Color(0xFFD35400);
 
   @override
   void dispose() {
@@ -39,7 +38,6 @@ class _LoginPageState extends State<LoginPage> {
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
-      // Navigasi biasanya dihandle oleh Auth State Changes di main.dart
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -112,8 +110,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  // --- Sub-Widgets untuk Kerapihan Kode ---
 
   Widget _buildBackgroundCircle({
     double? top,
