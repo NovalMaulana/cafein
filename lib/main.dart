@@ -25,14 +25,11 @@ class MyApp extends StatelessWidget {
       home: StreamBuilder<AuthState>(
         stream: Supabase.instance.client.auth.onAuthStateChange,
         builder: (context, snapshot) {
-          // Check if user is logged in
           final session = snapshot.hasData ? snapshot.data!.session : null;
 
           if (session != null) {
-            // User is logged in, show map page
             return const MapPage();
           } else {
-            // User is not logged in, show login page
             return const LoginPage();
           }
         },
