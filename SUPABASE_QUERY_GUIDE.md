@@ -1,17 +1,4 @@
-# 📝 QUERY SUPABASE - PANDUAN SINGKAT
-
-## 🎯 Cara Menjalankan Query
-
-1. Buka **Supabase Dashboard** → https://app.supabase.com
-2. Pilih project **nongki**
-3. Klik menu **SQL Editor** di sidebar kiri
-4. Klik **New Query**
-5. Copy-paste query di bawah ini
-6. Klik **Run** atau tekan `Ctrl + Enter`
-
----
-
-## 📋 QUERY LENGKAP (Copy semua dan jalankan sekaligus)
+## 📋 QUERY
 
 ```sql
 -- ============================================
@@ -158,7 +145,7 @@ WHERE tablename IN ('profiles', 'cafes');
 
 ---
 
-## 🧪 Test Query (Optional)
+## 🧪 Test Query
 
 ### Lihat semua profiles
 ```sql
@@ -187,63 +174,3 @@ DELETE FROM public.cafes;
 -- Hapus semua profile
 DELETE FROM public.profiles;
 ```
-
----
-
-## 🎯 Apa yang Terjadi Setelah Setup?
-
-1. ✅ User bisa **register** dengan email & password
-2. ✅ Data user tersimpan di tabel `profiles`
-3. ✅ User bisa **login** dengan kredensial yang sama
-4. ✅ Setiap cafe yang dibuat akan punya `user_id`
-5. ✅ User hanya bisa edit/delete cafe milik sendiri
-6. ✅ Semua user bisa lihat semua cafe (public mode)
-
----
-
-## 🔒 Keamanan (RLS)
-
-**Row Level Security (RLS)** memastikan:
-- User tidak bisa lihat profil user lain
-- User tidak bisa edit cafe milik user lain
-- User tidak bisa hapus cafe milik user lain
-- Semua operasi database aman dan tervalidasi
-
----
-
-## 🐛 Troubleshooting
-
-### Error: "relation already exists"
-**Artinya:** Tabel/policy sudah ada
-**Solusi:** Abaikan error ini, atau hapus dulu dengan:
-```sql
-DROP TABLE IF EXISTS public.profiles CASCADE;
--- Lalu jalankan ulang query CREATE TABLE
-```
-
-### Error: "permission denied"
-**Artinya:** Tidak punya akses
-**Solusi:** Pastikan Anda login sebagai owner project di Supabase
-
-### Policy tidak bekerja
-**Solusi:** Cek apakah RLS sudah enabled:
-```sql
-SELECT tablename, rowsecurity 
-FROM pg_tables 
-WHERE schemaname = 'public' 
-AND tablename IN ('profiles', 'cafes');
-```
-Kolom `rowsecurity` harus `true`
-
----
-
-## 📞 Butuh Bantuan?
-
-- Supabase Docs: https://supabase.com/docs
-- Supabase Discord: https://discord.supabase.com
-- Check Logs: Supabase Dashboard → Logs
-
----
-
-**Setup Selesai! 🎉**
-Sekarang aplikasi Anda sudah punya sistem authentication yang aman!
