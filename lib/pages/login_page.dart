@@ -15,6 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _authService = AuthService();
+
   bool _isLoading = false;
   bool _obscurePassword = true;
 
@@ -30,7 +31,6 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
-
     setState(() => _isLoading = true);
 
     try {
@@ -42,205 +42,151 @@ class _LoginPageState extends State<LoginPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Login gagal: ${e.toString()}'),
-            backgroundColor: Colors.redAccent,
+            content: Text('Gagal: ${e.toString()}'),
+            backgroundColor: const Color(0xFFC0392B),
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
           ),
         );
       }
     } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [_primaryColor, _primaryColor.withOpacity(0.8)],
-          ),
-        ),
-        child: Stack(
-          children: [
-            // Background Decor
-            _buildBackgroundCircle(
-              top: -100,
-              right: -100,
-              size: 300,
-              color: _accentColor.withOpacity(0.1),
-            ),
-            _buildBackgroundCircle(
-              bottom: -50,
-              left: -50,
-              size: 200,
-              color: Colors.white.withOpacity(0.05),
-            ),
+      backgroundColor: _primaryColor,
+      body: Stack(
+        children: [
+          _buildBackground(),
 
-            SafeArea(
-              child: Center(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Column(
-                    children: [
-                      _buildLogo(),
-                      const SizedBox(height: 30),
-                      _buildTitle(),
-                      const SizedBox(height: 50),
-                      _buildGlassmorphicCard(),
-                      const SizedBox(height: 30),
-                      _buildRegisterLink(),
-                    ],
-                  ),
+          SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                child: Column(
+                  children: [
+                    _buildHeader(),
+                    const SizedBox(height: 40),
+                    _buildLoginCard(),
+                    const SizedBox(height: 30),
+                    _buildFooter(),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBackgroundCircle({
-    double? top,
-    double? right,
-    double? bottom,
-    double? left,
-    required double size,
-    required Color color,
-  }) {
-    return Positioned(
-      top: top,
-      right: right,
-      bottom: bottom,
-      left: left,
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(shape: BoxShape.circle, color: color),
-      ),
-    );
-  }
-
-  Widget _buildLogo() {
-    return TweenAnimationBuilder(
-      tween: Tween<double>(begin: 0, end: 1),
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.elasticOut,
-      builder: (context, double value, child) {
-        return Transform.scale(
-          scale: value,
-          child: Container(
-            padding: const EdgeInsets.all(25),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
-            ),
-            child: Icon(Icons.coffee_rounded, size: 70, color: _accentColor),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 
-  Widget _buildTitle() {
-    return Column(
+  Widget _buildBackground() {
+    return Stack(
       children: [
-        Text(
-          'Cafe In',
-          style: TextStyle(
-            fontSize: 40,
-            fontWeight: FontWeight.w900,
-            color: Colors.white,
-            letterSpacing: 4,
-            shadows: [
-              Shadow(
-                color: Colors.black.withOpacity(0.3),
-                offset: const Offset(0, 4),
-                blurRadius: 8,
-              ),
-            ],
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [_primaryColor, const Color(0xFF1A252F)],
+            ),
           ),
         ),
-        Text(
-          'Titik Kumpul para Skena',
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.white.withOpacity(0.7),
-            letterSpacing: 1.2,
-            fontWeight: FontWeight.w300,
+        Positioned(
+          top: -50,
+          right: -50,
+          child: CircleAvatar(
+            radius: 100,
+            backgroundColor: _accentColor.withValues(alpha: 0.05),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildGlassmorphicCard() {
+  Widget _buildHeader() {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.05),
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+          ),
+          child: Icon(Icons.coffee_rounded, size: 48, color: _accentColor),
+        ),
+        const SizedBox(height: 20),
+        const Text(
+          'Cafe In',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
+            letterSpacing: -0.5,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Titik Kumpul para Skena',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 15,
+            color: Colors.white.withValues(alpha: 0.6),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoginCard() {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(30),
+      borderRadius: BorderRadius.circular(32),
       child: BackdropFilter(
         filter: ui.ImageFilter.blur(sigmaX: 15, sigmaY: 15),
         child: Container(
-          padding: const EdgeInsets.all(25),
+          padding: const EdgeInsets.all(32),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.9),
-            borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: Colors.white.withOpacity(0.2)),
+            color: Colors.white.withValues(alpha: 0.95),
+            borderRadius: BorderRadius.circular(32),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.2),
+                blurRadius: 30,
+                offset: const Offset(0, 15),
+              ),
+            ],
           ),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
-                _buildTextField(
+                _buildField(
                   controller: _emailController,
-                  label: 'Email Address',
-                  icon: Icons.email_outlined,
+                  label: 'Email',
+                  icon: Icons.alternate_email_rounded,
+                  hint: 'nama@email.com',
                   keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  validator: (value) {
-                    if (value == null || value.isEmpty)
-                      return 'Email tidak boleh kosong';
-                    if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value))
-                      return 'Format email salah';
-                    return null;
-                  },
+                  validator: (v) =>
+                      !v!.contains('@') ? 'Email tidak valid' : null,
                 ),
                 const SizedBox(height: 20),
-                _buildTextField(
+                _buildField(
                   controller: _passwordController,
                   label: 'Password',
                   icon: Icons.lock_outline_rounded,
+                  hint: 'Min. 6 karakter',
                   isPassword: true,
-                  obscureText: _obscurePassword,
-                  textInputAction: TextInputAction.done,
-                  onTogglePassword: () =>
+                  obscure: _obscurePassword,
+                  onToggle: () =>
                       setState(() => _obscurePassword = !_obscurePassword),
-                  validator: (value) {
-                    if (value == null || value.isEmpty)
-                      return 'Password tidak boleh kosong';
-                    if (value.length < 6) return 'Minimal 6 karakter';
-                    return null;
-                  },
+                  validator: (v) => v!.length < 6 ? 'Minimal 6 karakter' : null,
                 ),
                 const SizedBox(height: 35),
-                _buildLoginButton(),
+                _buildSubmitButton(),
               ],
             ),
           ),
@@ -249,43 +195,101 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginButton() {
-    return Container(
-      width: double.infinity,
-      height: 55,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: _accentColor.withOpacity(0.2),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
+  Widget _buildField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    required String hint,
+    bool isPassword = false,
+    bool obscure = false,
+    VoidCallback? onToggle,
+    TextInputType? keyboardType,
+    String? Function(String?)? validator,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label.toUpperCase(),
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w800,
+            color: _primaryColor.withValues(alpha: 0.5),
+            letterSpacing: 1.2,
           ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: controller,
+          obscureText: obscure,
+          keyboardType: keyboardType,
+          validator: validator,
+          style: TextStyle(color: _primaryColor, fontWeight: FontWeight.bold),
+          decoration: InputDecoration(
+            isDense: true,
+            hintText: hint,
+            hintStyle: TextStyle(
+              color: Colors.grey[400],
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+            ),
+            prefixIcon: Icon(icon, color: _primaryColor, size: 20),
+            suffixIcon: isPassword
+                ? IconButton(
+                    icon: Icon(
+                      obscure
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      color: Colors.grey,
+                      size: 18,
+                    ),
+                    onPressed: onToggle,
+                  )
+                : null,
+            filled: true,
+            fillColor: Colors.grey[100],
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide.none,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide(color: _accentColor, width: 1.5),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    return SizedBox(
+      width: double.infinity,
+      height: 60,
       child: ElevatedButton(
         onPressed: _isLoading ? null : _handleLogin,
         style: ElevatedButton.styleFrom(
           backgroundColor: _primaryColor,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(16),
           ),
-          elevation: 0,
+          elevation: 5,
+          shadowColor: _primaryColor.withValues(alpha: 0.4),
         ),
         child: _isLoading
             ? const SizedBox(
                 height: 24,
                 width: 24,
                 child: CircularProgressIndicator(
-                  strokeWidth: 2,
                   color: Colors.white,
+                  strokeWidth: 2,
                 ),
               )
             : const Text(
-                'MASUK',
+                'Masuk',
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w900,
                   letterSpacing: 1.5,
                 ),
               ),
@@ -293,78 +297,22 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildRegisterLink() {
+  Widget _buildFooter() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           'Belum punya akun? ',
-          style: TextStyle(color: Colors.white.withOpacity(0.8)),
+          style: TextStyle(color: Colors.white.withValues(alpha: 0.6)),
         ),
         TextButton(
           onPressed: () => Navigator.of(
             context,
           ).push(MaterialPageRoute(builder: (_) => const RegisterPage())),
           child: Text(
-            'DAFTAR',
-            style: TextStyle(color: _accentColor, fontWeight: FontWeight.bold),
+            'Daftar',
+            style: TextStyle(color: _accentColor, fontWeight: FontWeight.w900),
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    bool isPassword = false,
-    bool obscureText = false,
-    VoidCallback? onTogglePassword,
-    TextInputType? keyboardType,
-    TextInputAction? textInputAction,
-    String? Function(String?)? validator,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 4, bottom: 8),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: _primaryColor.withOpacity(0.6),
-            ),
-          ),
-        ),
-        TextFormField(
-          controller: controller,
-          obscureText: obscureText,
-          keyboardType: keyboardType,
-          textInputAction: textInputAction,
-          decoration: InputDecoration(
-            prefixIcon: Icon(icon, color: _primaryColor, size: 20),
-            suffixIcon: isPassword
-                ? IconButton(
-                    icon: Icon(
-                      obscureText ? Icons.visibility_off : Icons.visibility,
-                      size: 18,
-                    ),
-                    onPressed: onTogglePassword,
-                  )
-                : null,
-            hintText: 'Masukkan $label',
-            filled: true,
-            fillColor: Colors.grey[100],
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 16),
-          ),
-          validator: validator,
         ),
       ],
     );
